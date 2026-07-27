@@ -53,6 +53,16 @@ def safe_invoke(llm, prompt: str, max_retries: int = 3,
     raise last_error
 
 
+def _break_long_tokens(text: str, max_len: int = 45) -> str:
+    """Insert soft breaks into long unbroken strings (like URLs) so fpdf2
+    can wrap them — otherwise a single 'word' wider than the page crashes
+    multi_cell with 'Not enough horizontal space to render a single character'."""
+    def _break(match):
+        word = match.group(0)
+        return " ".join(word[i:i+max_len] for i in range(0, len(word), max_len))
+    return re.sub(r"\S{" + str(max_len) + r",}", _break, text)
+
+
 def _pdf_safe(text: str) -> str:
     """Core PDF fonts only support Latin-1. Swap common problem characters
     instead of crashing, and drop anything else that can't be encoded."""
@@ -63,8 +73,8 @@ def _pdf_safe(text: str) -> str:
     }
     for bad, good in replacements.items():
         text = text.replace(bad, good)
-    return text.encode("latin-1", "replace").decode("latin-1")
-
+    text = text.encode("latin-1", "replace").decode("latin-1")
+    return _break_long_tokens(text)
 
 def report_to_pdf(report_text: str, topic: str = "Research Report") -> bytes:
     """
