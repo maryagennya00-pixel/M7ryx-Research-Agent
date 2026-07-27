@@ -194,7 +194,16 @@ footer {{ visibility: hidden; }}
     margin-top: -18px;
 }}
 
-/* ---- glass input card ---- */
+/* ---- glass input card: targets the REAL container via its stable key class ---- */
+.st-key-m7ryx_input_card {{
+    background: var(--glass);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 1.6rem 1.6rem 1.3rem 1.6rem;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+}}
 .m7ryx-card {{
     background: var(--glass);
     border: 1px solid var(--line);
@@ -479,17 +488,18 @@ st.markdown("""
 # --------------------------------------------------------------------------
 # INPUT CARD
 # --------------------------------------------------------------------------
-st.markdown('<div class="m7ryx-card">', unsafe_allow_html=True)
+# --------------------------------------------------------------------------
+# INPUT CARD
+# --------------------------------------------------------------------------
+input_card = st.container(key="m7ryx_input_card")
 
-topic = st.text_input(
-    "topic",
-    placeholder="Enter a research topic...",
-    label_visibility="collapsed",
-)
-
-run_clicked = st.button("Run research →", use_container_width=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+with input_card:
+    topic = st.text_input(
+        "topic",
+        placeholder="Enter a research topic...",
+        label_visibility="collapsed",
+    )
+    run_clicked = st.button("Run research →", use_container_width=True)
 
 if not GROQ_API_KEY or not TAVILY_API_KEY:
     st.markdown(
