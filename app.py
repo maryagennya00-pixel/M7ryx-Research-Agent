@@ -483,7 +483,7 @@ st.markdown('<div class="m7ryx-card">', unsafe_allow_html=True)
 
 topic = st.text_input(
     "topic",
-    placeholder="e.g. The economic impact of offshore wind energy in 2026",
+    placeholder="Enter a research topic...",
     label_visibility="collapsed",
 )
 
