@@ -330,7 +330,13 @@ div[role="radiogroup"] label:hover {{ border-color: var(--star); color: var(--in
 
 hr {{ border-color: var(--line); }}
 
-/* ---- lock sidebar open: hide collapse/expand controls ---- */
+/* ---- lock sidebar open: force it visible/expanded no matter what ---- */
+[data-testid="stSidebar"] {{
+    transform: none !important;
+    visibility: visible !important;
+    min-width: 21rem !important;
+    width: 21rem !important;
+}}
 [data-testid="collapsedControl"] {{ display: none !important; }}
 button[title="Collapse sidebar"] {{ display: none !important; }}
 [data-testid="stSidebarCollapseButton"] {{ display: none !important; }}
